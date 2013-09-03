@@ -8,12 +8,15 @@ can be improved feel free to work up a patch.
 from lamson import server, routing
 import sys, os
 import logging
-import daemon
 
 try:
-    from daemon import pidlockfile 
-except:
-    from lockfile import pidlockfile 
+    import daemon
+    try:
+        from daemon import pidlockfile 
+    except:
+        from lockfile import pidlockfile 
+except ImportError:
+    daemon = None
 
 import imp
 import signal
@@ -105,6 +108,7 @@ def start_server(pid, force, chroot, chdir, uid, gid, umask, settings_loader, de
     accordingly.  It will only drop to the uid/gid given if both are given.
     """
     check_for_pid(pid, force)
+    debug |= not daemon
 
     if not debug:
         daemonize(pid, chdir, chroot, umask, files_preserve=[])

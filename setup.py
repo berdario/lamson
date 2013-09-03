@@ -1,3 +1,10 @@
+import sys
+
+dependencies = ['chardet', 'jinja2', 'mock', 'nose', 'python-modargs']
+
+if sys.platform != 'win32':
+    dependencies += 'python-daemon'
+
 try:
     from setuptools import setup
 except ImportError:
@@ -14,8 +21,10 @@ config = {
     'author_email': 'zedshaw@zedshaw.com',
      'version': '1.3.4',
      'scripts': ['bin/lamson'],
-     'install_requires': ['chardet', 'jinja2', 'mock', 'nose', 'python-daemon',
-                         'python-modargs'],
+     'entry_points': {'console_scripts': [
+             'lamson = lamson:_main'
+             ]},
+     'install_requires': dependencies,
      'packages': ['lamson',
      'lamson.handlers'],
      'name': 'lamson'
